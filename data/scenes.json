@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "zone1",
+    "name": "ECE_Department",
+    "zone": "ECE Department",
+    "image_path": "/api/images/panorama/ECE/img1.jpg",
+    "start_rotation": -45
+  },
+  {
+    "_id": "zone2",
+    "name": "ECE_Laboratory",
+    "zone": "ECE Laboratory",
+    "image_path": "/api/images/panorama/ECE/img2.jpg",
+    "start_rotation": 20
+  },
+  {
+    "_id": "zone3",
+    "name": "Electronics_Laboratory_1",
+    "zone": "Electronics Laboratory",
+    "image_path": "/api/images/panorama/ECE/img3.JPG",
+    "start_rotation": 90
+  },
+  {
+    "_id": "zone4",
+    "name": "Electronics_Laboratory_2",
+    "zone": "Electronics Laboratory",
+    "image_path": "/api/images/panorama/ECE/img4.jpg",
+    "start_rotation": -90
+  },
+  {
+    "_id": "zone5",
+    "name": "Fundamental_Laboratory_1",
+    "zone": "Fundamental Laboratory",
+    "image_path": "/api/images/panorama/ECE/img5.jpg",
+    "start_rotation": -90
+  },
+  {
+    "_id": "zone6",
+    "name": "Fundamental_Laboratory_2",
+    "zone": "Fundamental Laboratory",
+    "image_path": "/api/images/panorama/ECE/img6.JPG",
+    "start_rotation": -60
+  }
+]

@@ -1,0 +1,166 @@
+/* รีเซ็ตค่าพื้นฐาน */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    /* พื้นหลังไล่สีน้ำเงินเข้ม */
+    background: linear-gradient(135deg, #091a3a 0%, #030812 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px; /* ระยะห่างระหว่างฝั่งซ้ายและขวา */
+    width: 900px;
+    max-width: 90%;
+}
+
+/* --- ฝั่งซ้าย: ข้อความ --- */
+.text-section {
+    text-align: center;
+}
+
+.brand-title {
+    font-size: 80px;
+    font-weight: 900;
+    position: relative;
+    color: #ffffff;
+    margin-bottom: 20px;
+    z-index: 1;
+}
+
+/* เอฟเฟกต์เงาคำว่า SONY ด้านหลัง */
+.brand-title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: -10px;
+    left: -15px;
+    color: #12282d; /* สีเงาเขียวเข้มๆ */
+    z-index: -1;
+}
+
+.welcome-text {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.tour-text {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* =======================================
+   1. ปรับกล่องให้เตี้ยลง (ลด Padding)
+======================================= */
+.login-card {
+    background-color: #0d151e;
+    width: 100%;
+    max-width: 360px;
+    /* ลด Padding บนจาก 55px เหลือ 45px และล่างจาก 35px เหลือ 25px */
+    padding: 45px 35px 25px; 
+    border-top: 4px solid #ffffff; 
+    position: relative; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* =======================================
+   2. วงกลม (ดึงให้ผ่ากลางเส้นขาวพอดี)
+======================================= */
+.circle-icon {
+    width: 86px; 
+    height: 86px;
+    background-color: #f4f4f4;
+    border-radius: 50%;
+    
+    position: absolute;
+    /* ✅ ดึงวงกลมให้ผ่ากลางเส้นขาวเป๊ะ 
+       (สูตรคือ: ติดลบครึ่งนึงของเส้นขาวเสมอ -> เส้นบนหนา 4px เลยใส่ -2px ครับ) */
+    top: -2px; 
+    
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* รูปไอคอนคนด้านในวงกลม */
+.inner-circle {
+    width: 42px;
+    height: 42px;
+    border: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>');
+    background-size: cover;
+    background-position: center;
+}
+
+/* =======================================
+   2. ปรับฟอร์มให้ชิดขึ้น (ลด Gap)
+======================================= */
+form {
+    display: flex;
+    flex-direction: column;
+    /* ลดช่องว่างระหว่าง Username และ Password จาก 16px เหลือ 12px */
+    gap: 12px; 
+    /* ลดระยะห่างด้านบนจาก 35px เหลือ 25px */
+    margin-top: 25px; 
+    border: none !important; 
+    box-shadow: none !important; 
+}
+
+input {
+    padding: 12px 18px; /* ลดความอ้วนของช่องกรอกข้อมูลลงนิดนึง */
+    background-color: #f4f4f4;
+    border: none;
+    font-size: 15px;
+    color: #333;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #20CDFA;
+}
+
+.login-btn {
+    background: none;
+    border: none;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid white;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 15px auto 0; /* ลดระยะห่างด้านบนปุ่มลง */
+    padding-bottom: 4px;
+    letter-spacing: 2px;
+    width: fit-content;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    color: #20CDFA;
+    border-bottom-color: #20CDFA;
+}

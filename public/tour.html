@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <title>Factory Virtual Tour</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <style>
+        body, html { 
+            margin: 0; 
+            height: 100dvh; 
+            width: 100vw;
+            position: fixed; 
+            overflow: hidden; 
+            background-color: #000; 
+            font-family: 'Kanit', sans-serif; 
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100dvh !important;
+            display: block;
+        }
+
+        header span, header button, header div {
+            font-family: 'Kanit', sans-serif !important;
+        }
+        
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: #fff;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; z-index: 9999; transition: opacity 0.5s;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #333;
+            border-top: 4px solid #007bff; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #popup-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000;
+            justify-content: center; align-items: center;
+        }
+        .popup-content { 
+            position: relative !important; background: transparent; padding: 0; 
+            max-width: 85% !important; width: 1000px !important; max-height: 90%; 
+        }
+        #popup-image { 
+            width: 100% !important; height: auto !important; max-height: 85vh !important; 
+            object-fit: contain !important; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: block; 
+        }
+        
+        .close-btn { 
+            position: absolute !important; top: 15px !important; right: 25px !important; 
+            color: white !important; font-size: 55px !important; cursor: pointer; transition: all 0.2s ease;
+            z-index: 9999 !important; text-shadow: 0 0 10px rgba(0,0,0,0.5); line-height: 1 !important; opacity: 0.8;
+        }
+        .close-btn:hover { color: #20CDFA !important; transform: scale(1.1); opacity: 1; }
+
+        #nav-bar {
+            position: fixed; bottom: 80px; 
+            left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px; z-index: 100;
+            background: rgba(0, 0, 0, 0.6); padding: 15px 30px;
+            border-radius: 50px; backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1); transition: opacity 0.5s;
+        }
+        .nav-dot {
+            width: 16px; height: 16px; background-color: #ffffff; border-radius: 50%; cursor: pointer;
+            transition: all 0.4s; position: relative; box-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+        .nav-dot:hover { transform: scale(1.3); }
+        .nav-dot::after {
+            content: attr(data-label); position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(10px); background: rgba(0, 0, 0, 0.9);
+            color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px;
+            white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.3s; font-family: sans-serif;
+        }
+        .nav-dot:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+        
+        .nav-dot.visited { background-color: #0072CE; box-shadow: 0 0 10px #0072CE; transform: scale(1.1); }
+        .nav-dot.current { background-color: #20CDFA; border: 2px solid white; transform: scale(1.4); }
+        .hidden-nav { opacity: 0; pointer-events: none; }
+
+        #model-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 3000;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        #model-viewer-container {
+            width: 80%; height: 80%; background: #1a1a1a;
+            border-radius: 10px; position: relative; overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        #model-canvas { width: 100%; height: 100%; display: block; }
+        .model-close-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255,0,0,0.7); color: white; border: none;
+            width: 40px; height: 40px; border-radius: 50%; font-size: 20px;
+            cursor: pointer; z-index: 10;
+        }
+
+        .map-dot {
+            position: absolute; width: 25px; height: 25px; background: #ff3333;
+            border: 3px solid white; border-radius: 50%; cursor: pointer;
+            transform: translate(-50%, -50%); box-shadow: 0 0 15px rgba(255,51,51,0.6);
+            z-index: 10; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .map-dot:hover {
+            background: #20CDFA !important; transform: translate(-50%, -50%) scale(1.4) !important;
+            box-shadow: 0 0 20px #20CDFA !important;
+        }
+        .map-dot::after {
+            content: attr(title); position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white;
+            padding: 4px 10px; border-radius: 5px; font-size: 12px;
+            white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .map-dot:hover::after { opacity: 1; }
+
+        .map-dot.current-location {
+            background: #20CDFA !important; border-color: #fff !important;
+            transform: translate(-50%, -50%) scale(1.6) !important;
+            box-shadow: 0 0 15px #20CDFA !important; animation: pulse-pin 1.5s infinite; z-index: 20;
+        }
+        @keyframes pulse-pin {
+            0% { box-shadow: 0 0 0 0 rgba(32, 205, 250, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(32, 205, 250, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(32, 205, 250, 0); }
+        }
+    </style>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./assets/libs/three.module.js",
+            "GLTFLoader": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+            "VRButton": "./assets/jsm/webxr/VRButton.js",
+            "OrbitControls": "./assets/jsm/controls/OrbitControls.js",
+            "XRHandModelFactory": "./assets/jsm/webxr/XRHandModelFactory.js",
+            "XRControllerModelFactory": "https://unpkg.com/three@0.160.0/examples/jsm/webxr/XRControllerModelFactory.js",
+            "gsap": "https://unpkg.com/gsap@3.12.5/index.js"
+        }
+    }
+    </script>
+</head>
+<body>
+
+    <header class="fixed top-0 right-0 p-8 z-[9999] flex items-center gap-8">
+        <div class="flex items-center gap-2 text-xs font-semibold tracking-widest border-r border-white/20 pr-6 mr-2 font-kanit text-white">
+            <button id="lang-en" class="hover:text-[#20CDFA] transition-colors duration-300 opacity-50">EN</button>
+            <span class="text-white/30">|</span>
+            <button id="lang-th" class="hover:text-[#20CDFA] transition-colors duration-300 text-[#20CDFA]">TH</button>
+        </div>
+        
+        <a href="index.html" class="group flex items-center gap-2 text-white hover:text-[#0072CE] transition-colors duration-300 pointer-events-auto">
+            <div class="p-1.5 bg-white/10 rounded-full group-hover:bg-[#0072CE]/20 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <span class="text-sm font-medium tracking-wider font-kanit">หน้าหลัก</span>
+        </a>
+
+        <button id="webSoundBtn" class="flex items-center gap-2 text-white hover:text-[#0072CE] transition-colors duration-300 cursor-pointer group pointer-events-auto">
+            <svg id="webIconOn" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M13 5v14l-5-4H5V9h3l5-4zm2.5 7c0-1.5-.9-2.8-2.2-3.4v6.8c1.3-.6 2.2-1.9 2.2-3.4zM15 3.2v2.1c2.8.7 5 3.3 5 6.7s-2.2 6-5 6.7v2.1c4-.8 7-4.4 7-8.8s-3-8-7-8.8z"/>
+            </svg>
+            <svg id="webIconOff" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+            <span class="text-sm font-medium tracking-wider">เสียง</span>
+        </button>
+
+        <div class="relative group pointer-events-auto">
+            <div id="menuBtn" class="flex items-center gap-2 cursor-pointer text-white hover:text-[#20CDFA] transition group">
+                <div class="space-y-1.5">
+                    <span class="block w-6 h-0.5 bg-current transition"></span>
+                    <span class="block w-6 h-0.5 bg-current transition"></span>
+                </div>
+                <span class="text-sm font-medium tracking-wider font-kanit">เมนู</span>
+            </div>
+
+            <div id="menuDropdown" class="hidden absolute right-0 mt-4 w-48 bg-black/80 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-2xl transition-all duration-300 transform origin-top-right">
+                <ul class="py-2 font-kanit">
+                    <li>
+                        <button id="showGuideBtn" class="w-full text-left px-5 py-3 text-sm text-white hover:bg-[#20CDFA]/20 hover:text-[#20CDFA] transition flex items-center gap-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            วิธีการใช้งาน
+                        </button>
+                    </li>
+                    <li>
+                        <button id="fullscreenBtn" class="w-full text-left px-5 py-3 text-sm text-white hover:bg-[#20CDFA]/20 hover:text-[#20CDFA] transition flex items-center gap-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                            โหมดเต็มจอ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div id="map-button" style="position: fixed; bottom: 30px; left: 30px; width: 85px; height: 85px; cursor: pointer; z-index: 9999; transition: transform 0.3s ease;">
+        <img src="assets/img/uxui/map.png" alt="Map Button" style="width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 5px 25px rgba(0,0,0,0.5);">
+    </div>
+
+    <div id="map-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;">
+        <div style="position: relative; width: 95%; max-width: 1400px; background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.7);">
+            
+            <div id="close-map" style="position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; line-height: 1; z-index: 10001;">&times;</div>
+            
+<h2 style="color: #0041a8; margin-top: 20px; margin-bottom: 20px; font-size: 24px; line-height: 1.5;">
+    แผนผังอาคาร - คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ<br>
+    (Building Directory - Faculty of Engineering, KMUTNB)
+</h2>
+            <div style="position: relative; width: 100%; height: 75vh; background: #f0f0f0; border: 2px solid #ddd; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                
+                <div style="position: relative; height: 100%; display: inline-block;">
+                    <img src="assets/img/uxui/factory-map.jpg" style="height: 100%; width: auto; display: block; object-fit: contain;">
+                    
+                    <div id="map-pin-ece-dept" onclick="jumpFromMap('entrance1')" class="map-dot" title="ECE Department" style="top: 80.5%; left: 42.5%;"></div>
+                    <div id="map-pin-ece-lab" onclick="jumpFromMap('showcase1')" class="map-dot" title="ECE Laboratory" style="top: 83%; left: 50%;"></div> 
+                    <div id="map-pin-elec-lab" onclick="jumpFromMap('communication_lounge1')" class="map-dot" title="Electronics Laboratory" style="top: 78%; left: 48%;"></div>
+                    <div id="map-pin-fund-lab" onclick="jumpFromMap('canteen_building41')" class="map-dot" title="Fundamental Laboratory" style="top: 83%; left: 47%;"></div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p id="loading-text">กำลังโหลดข้อมูล...</p>
+    </div>
+
+    <div id="popup-overlay">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <img id="popup-image" src="" alt="Popup Image">
+        </div>
+    </div>
+
+    <div id="video-popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center;">
+        <div class="popup-content" style="position: relative; max-width: 90%; max-height: 90%;">
+            <span class="video-close-btn" style="position: absolute; top: -40px; right: 0; color: white; font-size: 30px; cursor: pointer; transition: color 0.3s;">&times;</span>
+            <video id="popup-video" controls style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: block;"></video>
+        </div>
+    </div>
+
+    <div id="model-overlay" style="display: none;">
+        <div id="model-viewer-container">
+            <button class="model-close-btn">&times;</button>
+            <canvas id="model-canvas"></canvas>
+        </div>
+        <p class="text-white mt-4 font-light tracking-wider">หมุนเพื่อดูโมเดลรอบทิศทาง</p>
+    </div>
+
+    <div id="nav-bar" class="hidden-nav"></div>
+
+    <script type="module" src="./js/tourMain.js"></script>
+
+    <script>
+        function jumpFromMap(targetId) {
+            const mapOverlay = document.getElementById('map-overlay');
+            if (mapOverlay) {
+                mapOverlay.style.opacity = '0';
+                setTimeout(() => { mapOverlay.style.display = 'none'; }, 400);
+            }
+
+            const engine = window.tourEngine || (window.tourApp && window.tourApp.engine);
+            if (engine && typeof engine.onHotspotClick === 'function') {
+                engine.onHotspotClick(targetId, 0);
+            } else {
+                console.error("Engine ยังไม่พร้อมทำงาน หรือเรียกใช้ผิดวิธี");
+            }
+        }
+        window.jumpFromMap = jumpFromMap;
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <!-- 1. นำเข้า Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 2. นำเข้าฟอนต์ -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- 3. นำเข้า GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', 'Kanit', sans-serif;
+      background-color: #000;
+      color: white;
+      overflow: hidden;
+    }
+
+    .bg-factory {
+        /* เปลี่ยน URL เป็นรูปจริงของคุณ */
+        background-image: url('./assets/img/factory-bg.jpg'); 
+        background-size: cover;
+        background-position: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Wrapper -->
+  <div class="background relative w-full h-screen bg-factory">
+
+    <!-- 1. Overlay พื้นฐาน -->
+    <div class="absolute inset-0 bg-black/40"></div>
+    
+    <!-- 2. Overlay ไล่เฉด -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent"></div>
+
+    <!-- 3. ✅ Overlay พาดเฉียง (ปรับใหม่: เอียงขวา / ) -->
+    <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        
+        <!-- แสงฟุ้งสีน้ำเงินเข้ม (ซ้ายบน -> เอียงขวา) -->
+        <!-- แก้ไข: เปลี่ยน -rotate-[15deg] เป็น rotate-[15deg] -->
+        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[150%] bg-[#002b6b]/60 transform rotate-[15deg] blur-3xl mix-blend-color-dodge"></div>
+        
+        <!-- เส้นตัดเฉียงสีน้ำเงินสว่าง -->
+        <div class="absolute -top-[20%] left-[22%] w-[200px] h-[150%] bg-gradient-to-b from-transparent via-[#0072CE]/10 to-transparent transform rotate-[15deg]"></div>
+        
+        <!-- เส้นคาดเล็กๆ สีขาว -->
+        <div class="absolute -top-[20%] left-[22%] w-[1px] h-[150%] bg-gradient-to-b from-transparent via-white/20 to-transparent transform rotate-[15deg]"></div>
+
+        <!-- แสงขาวจางๆ (ขวาล่าง -> เอียงขวา) -->
+        <div class="absolute -bottom-[20%] -right-[10%] w-[40%] h-[150%] bg-white/5 transform rotate-[15deg] blur-2xl"></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="fixed top-0 right-0 p-8 z-[9999] flex items-center gap-6 pointer-events-none">
+    
+    <div class="flex items-center gap-6 pointer-events-auto">
+        
+        <div class="flex items-center gap-2 text-xs font-semibold tracking-widest border-r border-white/20 pr-6 mr-2 font-kanit text-white">
+            <button id="lang-en" class="opacity-50 hover:opacity-100 transition">EN</button>
+            <span class="opacity-30">|</span>
+            <button id="lang-th" class="text-[#20CDFA]">TH</button>
+        </div>
+        
+        <a href="index.html" class="flex items-center gap-2 text-white hover:text-[#20CDFA] transition group font-kanit">
+            <div class="p-1.5 bg-white/10 rounded-full group-hover:bg-[#20CDFA]/20 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <span class="text-sm font-medium tracking-wider">หน้าหลัก</span>
+        </a>
+
+        <button id="webSoundBtn" class="flex items-center gap-2 text-white hover:text-[#20CDFA] transition group font-kanit pointer-events-auto">
+    <svg id="webIconOn" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M13 5v14l-5-4H5V9h3l5-4zm2.5 7c0-1.5-.9-2.8-2.2-3.4v6.8c1.3-.6 2.2-1.9 2.2-3.4zM15 3.2v2.1c2.8.7 5 3.3 5 6.7s-2.2 6-5 6.7v2.1c4-.8 7-4.4 7-8.8s-3-8-7-8.8z"/>
+    </svg>
+    <svg id="webIconOff" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+    </svg>
+    <span class="text-sm font-medium tracking-wider">เสียง</span>
+</button>
+        
+        <div class="relative group">
+            <div id="menuBtn" class="flex items-center gap-2 cursor-pointer text-white hover:text-[#20CDFA] transition font-kanit">
+                <div class="space-y-1.5">
+                    <span class="block w-6 h-0.5 bg-current transition"></span>
+                    <span class="block w-6 h-0.5 bg-current transition"></span>
+                </div>
+                <span class="text-sm font-medium tracking-wider">เมนู</span>
+            </div>
+        </div>
+    </div>
+</header>
+    <!-- Main Content -->
+    <main class="relative z-10 w-full h-full flex flex-col md:flex-row items-center px-8 md:px-20 pt-16">
+      
+      <!-- Content Left -->
+      <div class="content-left w-full md:w-1/2 flex flex-col justify-center space-y-6">
+        <h1 class="text-5xl md:text-7xl font-bold leading-tight gs-reveal">
+          <span class="block">SONY</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0072CE] to-cyan-300">Virtual Tour</span>
+        </h1>
+        
+        <p class="desc text-gray-300 text-lg md:text-xl font-light leading-relaxed max-w-lg gs-reveal">
+          คำโปรโมทโรงงานคำโปรโมทโรงงานคำโปรโมทโรงงาน<br>
+          คำโปรโมทโรงงานคำโปรโมทโรงงาน<br>
+          คำโปรโมทโรงงาน
+        </p>
+
+        <div class="w-20 h-1 bg-[#0072CE] mt-4 gs-reveal"></div>
+      </div>
+
+      <!-- Content Right -->
+      <div class="content-right w-full md:w-1/2 flex flex-col items-center md:items-end justify-center mt-10 md:mt-0 space-y-8 gs-reveal-right">
+        
+        <div class="tour-action relative group cursor-pointer">
+            <a id="startTourBtn" href="tour.html" class="flex items-center gap-6 relative z-10 bg-white/10 backdrop-blur-md border border-white/20 p-4 pr-8 rounded-full hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(0,114,206,0.4)]">                
+                <div class="btn-start w-16 h-16 bg-[#0072CE] rounded-full flex items-center justify-center shadow-lg group-hover:bg-[#005bb5] transition relative overflow-hidden">
+                    <svg class="w-6 h-6 text-white relative z-10 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+
+                <div class="tour-360 text-left">
+                    <span class="block text-xl font-bold text-white">Start Virtual Tour</span>
+                    <span class="text-xs text-gray-400">คลิกเพื่อเริ่มต้นการเยี่ยมชม</span>
+                </div>
+            </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const soundBtn = document.getElementById('webSoundBtn');
+        const iconOn = document.getElementById('webIconOn');
+        const iconOff = document.getElementById('webIconOff');
+
+        // ✅ ทุกครั้งที่โหลดหน้าแรก ให้ Default เป็น "เปิดเสียง" (false)
+        let isMuted = false;
+        localStorage.setItem('tourAudioMuted', 'false');
+
+        const updateUI = (status) => {
+            if (iconOn && iconOff) {
+                iconOn.style.display = status ? 'none' : 'block';
+                iconOff.style.display = status ? 'block' : 'none';
+            }
+        };
+
+        updateUI(false); // เริ่มต้นเป็นรูปลำโพงปกติ
+
+        if (soundBtn) {
+            soundBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    isMuted = !isMuted;
+    // ✅ ต้องเป็นแบบนี้ (ส่งค่า true/false ไปตรงๆ)
+    localStorage.setItem('tourAudioMuted', isMuted); 
+    updateUI(isMuted);
+});
+        }
+    });
+</script>
+
+<script>
+window.addEventListener('load', () => {
+    const menuBtn = document.getElementById('menuBtn');
+    const menuDropdown = document.getElementById('menuDropdown');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    if (menuBtn && menuDropdown) {
+        // 1. คลิกเปิด/ปิดเมนู
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuDropdown.classList.toggle('hidden');
+        });
+
+        // 2. คลิกข้างนอกเพื่อปิด
+        document.addEventListener('click', () => {
+            menuDropdown.classList.add('hidden');
+        });
+
+        // 3. ฟังก์ชันโหมดเต็มจอ
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+            // ✅ บันทึกว่าผู้ใช้ต้องการ Fullscreen
+            localStorage.setItem('requestFullscreen', 'true');
+        });
+    } else {
+        document.exitFullscreen();
+        localStorage.setItem('requestFullscreen', 'false');
+    }
+            });
+        }
+    }
+});
+// ✅ วางต่อตรงนี้: เช็คสถานะก่อนเปลี่ยนหน้า
+    // ⚠️ อย่าลืมเปลี่ยน 'startTourBtn' ให้ตรงกับ ID ปุ่มเริ่มทัวร์จริงๆ ของคุณ
+    const startTourBtn = document.getElementById('startTourBtn'); 
+    if (startTourBtn) {
+        startTourBtn.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                localStorage.setItem('requestFullscreen', 'true');
+            } else {
+                localStorage.setItem('requestFullscreen', 'false');
+            }
+        });
+    }
+</script>
+</body>
+</html>

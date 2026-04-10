@@ -1,0 +1,178 @@
+[ 
+  {
+    "scene_id": "zone1",
+    "target_scene_id": "zone2",
+    "type": "arrow",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "angle": 75,
+    "scale": 1,
+    "width": 0,
+    "height": 0,
+    "path": "",
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone1",
+    "target_scene_id": "zone2",
+    "type": "arrow",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "angle": -90,
+    "scale": 1,
+    "width": 0,
+    "height": 0,
+    "path": "",
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone2",
+    "target_scene_id": "zone1",
+    "type": "arrow",
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "angle": 180,
+    "scale": 1,
+    "width": 0,
+    "height": 0,
+    "path": "",
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone2",
+    "target_scene_id": "zone3",
+    "type": "door",
+    "x": 0.3,
+    "y": 1,
+    "z": -2.5,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone2",
+    "target_scene_id": "zone5",
+    "type": "door",
+    "x": -2.5,
+    "y": 1,
+    "z": -0.8,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone3",
+    "target_scene_id": "zone2",
+    "type": "door",
+    "x": -3,
+    "y": 1,
+    "z": 2.5,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+    {
+    "scene_id": "zone3",
+    "target_scene_id": "zone4",
+    "type": "arrow",
+    "angle": 0,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone3",
+    "type": "image_popup",
+    "x": 2,
+    "y": 1,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5495.jpeg"
+  },
+  {
+    "scene_id": "zone4",
+    "target_scene_id": "zone3",
+    "type": "arrow",
+    "angle": 180,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone4",
+    "type": "image_popup",
+    "x": 1,
+    "y": 1,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5486.jpeg"
+  },
+  {
+    "scene_id": "zone4",
+    "type": "image_popup",
+    "x": 2,
+    "y": 1,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5486.jpeg"
+  },
+  {
+    "scene_id": "zone4",
+    "type": "image_popup",
+    "x": 3,
+    "y": 1,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5486.jpeg"
+  },
+  {
+    "scene_id": "zone5",
+    "target_scene_id": "zone6",
+    "type": "ring",
+    "x": 1,
+    "y": 0,
+    "z": 1.5,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone5",
+    "target_scene_id": "zone2",
+    "type": "arrow",
+    "angle": -30,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone5",
+    "type": "image_popup",
+    "x": -0.5,
+    "y": 1.5,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5503.jpeg"
+  },
+  {
+    "scene_id": "zone6",
+    "target_scene_id": "zone5",
+    "type": "ring",
+    "x": 3,
+    "y": 0,
+    "z": 0.5,
+    "scale": 1,
+    "color": "#FFFFFF"
+  },
+  {
+    "scene_id": "zone6",
+    "type": "image_popup",
+    "x": 0.2,
+    "y": 1.5,
+    "z": -2,
+    "scale": 1,
+    "color": "#FFFFFF",
+    "path": "/api/images/info/IMG_5502.jpeg"
+  }
+]
