@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-theme-bg: #E6EDF5; 
+  --color-primary: #EB6725;
+  --color-icon-muted: #707070;
+  --color-text-primary: #EB6725;
+  --color-text-secondary: #1E293B;
+  --color-secondary: #a6a6a6;
+  --color-danger: #FF0000;
+  --color-saved: #4CAF50;
+
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
+.no-drag { user-drag: none; -webkit-user-drag: none; }

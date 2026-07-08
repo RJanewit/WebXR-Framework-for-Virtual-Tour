@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:;"
+    />
+    <title>Admin Dashboard</title>
+
+    <script>
+      if (localStorage.getItem("token")) {
+        window.location.replace("/landing.html");
+      }
+    </script>
+
+    <script>
+      if (localStorage.getItem("token")) {
+        window.location.replace("/admin.html");
+      }
+    </script>
+
+    <link rel="stylesheet" href="/css/output.css" />
+  </head>
+  <body
+    class="font-sans bg-gradient-to-br from-[#eb6725] to-black min-h-screen flex items-center justify-center text-white m-0 p-0"
+  >
+    <div
+      class="flex flex-col md:flex-row items-center justify-center gap-[80px] w-[900px] max-w-[90%]"
+    >
+      <!-- ส่วนข้อความด้านซ้าย -->
+      <div class="text-center md:text-left">
+        <h1
+          class="text-[70px] font-black relative text-white mb-4 z-10 before:content-[attr(data-text)] before:absolute before:-top-[8px] before:-left-[12px] before:text-[#6e2c0b] before:-z-10"
+          data-text="WebXR Framework"
+        >
+          WebXR Framework
+        </h1>
+        <h2 class="text-[36px] font-bold mb-1">Login to</h2>
+        <h2 class="text-[36px] font-bold text-white tracking-wide">
+          Admin Dashboard
+        </h2>
+      </div>
+
+      <div class="w-full max-w-[360px]">
+        <div
+          class="bg-gray-200 w-full pt-[45px] px-[35px] pb-[25px] border-t-4 border-[#eb6725] rounded-b-lg relative shadow-[0_15px_40px_rgba(0,0,0,0.8)]"
+        >
+          <div
+            class="w-[86px] h-[86px] bg-white rounded-full absolute -top-[2px] left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center z-20 shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#eb6725"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-[42px] h-[42px]"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+
+          <form id="loginForm" class="flex flex-col gap-[14px] mt-[25px]">
+            <input
+              type="text"
+              id="username"
+              placeholder="Username"
+              required
+              class="py-[12px] px-[18px] bg-white border border-gray-300 rounded-md text-[15px] text-[#333] placeholder-[#888] focus:outline-none focus:ring-2 focus:ring-[#eb6725] transition-all"
+            />
+
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              required
+              class="py-[12px] px-[18px] bg-white border border-gray-300 rounded-md text-[15px] text-[#333] placeholder-[#888] focus:outline-none focus:ring-2 focus:ring-[#eb6725] transition-all"
+            />
+
+            <button
+              type="submit"
+              class="bg-transparent font-bold text-gray-800 border-b-2 border-gray-800 text-[15px] cursor-pointer mt-[15px] mx-auto pb-[4px] tracking-[2px] w-fit transition-all duration-300 hover:text-[#eb6725] hover:border-[#eb6725]"
+            >
+              LOGIN
+            </button>
+          </form>
+
+          <p
+            id="message"
+            class="text-center mt-4 text-sm font-semibold text-red-600"
+          ></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/auth/Login.js"></script>
+  </body>
+</html>
